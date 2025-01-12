@@ -1,4 +1,4 @@
-# GTables 0.9.0 - Gerador-de-Tabelas-CSV
+# GTables 1.0.0 - Gerador-de-Tabelas-CSV
 > ### <img src="https://github.com/Vinicius-DevSys/GTables/blob/master/Referencias/python.png" width="55" alt="Descrição da imagem"> Conteúdo: Python, CSV, LibreOffice, SGBD, SOLID.
 
 Esse é um módulo para te auxiliar a criar tabelas simples em CSV para você usar no seu banco de dados, LibreOffice ou onde mais você desejar.
@@ -10,8 +10,8 @@ Esse módulo serve para você implementar códigos que trabalhem com criação d
 <div align="center"><img src="https://github.com/Vinicius-DevSys/GTables/blob/master/Referencias/Referencia%201.png" style="width:400px; height:175px;" alt="Descrição da imagem">
 <img src="https://github.com/Vinicius-DevSys/GTables/blob/master/Referencias/Referencia%202.png" style="width:400px; height:175px;" alt="Descrição da imagem"></div>
 
-## **Versão 0.9.0**
-Essa é a primeira versão e atende apenas a um dos objetivos principais: gerar tabelas. Quando for possível minimizar preenchimento de dados chegaremos a versão 1.0.0.
+## **Versão 1.0.0**
+Nessa versão, entregamos o recurso citado na versão anterior, que torna possível minimizar o preenchimento de dados com a geração de dados fictícios, baseados na demanda do desenvolvedor. Também temos a entrega de um novo objeto chamado DataMaker; é ele que torna possível a geração de dados fictícios por meio de seus métodos. Nesta versão, houve a correção do erro com caracteres especiais, codificando as tabelas para UTF-8.
 
 ## Documentação
 ### TableMaker(columns)
@@ -32,21 +32,41 @@ Essa é a classe responsável pelo arquivo CSV que será gerado.
 - **check_table( ):** Retorna uma lista que contém todas as linhas da tabela CSV ou em outras palavras retorna a tabela inteira.
 - **build( ):** Cria um arquivo com todo o conteúdo do atribulo self.table.
 
+### DataMaker(substantive, adjective, last_number=0)
+Essa é a classe responsável pela parte da geração de dados ficticios.
+
+#### Parâmetros
+- **substantive** - Adicione uma lista de substantivos (quanto maior a lista melhor) ou coisas que possam carregar o mesmo contexto para os seus objetivos.
+- **adjective** - Adicione uma lista de adjetivos (quanto maior a lista melhor) ou coisas que possam carregar o mesmo contexto para os seus objetivos.
+- **last_number** - Este parametro guarda apenas o último numero gerado como referência para gerar uma progressão numérica e você pode decidir em que valor ela se inicia, mas por padrão ele vem em 0.
+
+#### Atributos
+- **self.substantive** - Deve armazenar todos os substantivos em uma lista.
+- **self.adjective** - Deve armazenar todos os adjetivos em uma lista.
+- **self.last_number** - Deve armazenar o último numero gerado pelo objeto pra ser uma referência para o proximo número que for gerado. O valor atribuido na criação do objeto determina a refêrencia inicial da qual o número se inicia.
+
+#### Métodos
+- **create_name_data( )** - Esse método retorna uma string que é uma combinação aleatória da seguinte ordem: substantivo + adjetivo; sendo esses 2 elementos vindos das suas listas dos atributos **substantive** e **adjective**.
+- **create_progress_data(minmax=[0, 10])** - Esse método gera um número que pra cada vez que seja chamado, gere um numero aleatoriamente maior que o ultimo, porém seguindo um alcanse que será determinado pelo atributo **minmax** que deve receber uma lista que determine o valor minimo e máximo a ser sorteado **Exemplo:** minmax=[18, 60].
+
+
 ## Teste
 Esse é o arquivo de teste para a biblioteca.
 > Experimente usar esse modelo para conhecer e testar a biblioteca.
 ```py
 from GTables import *
 
-# Montagem da tabela.
-CSV = TableMaker(["Nome", "Idade", "CPF"])
-CSV.add_row(["James", 22])
-CSV.add_row(["Mary", 18])
-CSV.add_row(["George", 25])
+# Elementos para composição dos dados.
+subst = ["Espada", "Escudo", "Lança", "Adaga", "Orb", "Martelo"]
+adject = ["de Fogo", "Congelante", "Lendária", "Ancestral", "das Sombras", "de Guerra"]
 
-# Trecho para nos ajudar a visualizar o estado da tabela.
-for i in CSV.check_table():
-    print(i)
+# Montagem da tabela.
+CSV = TableMaker(["Item", "Valor"])
+MOCK = DataMaker(subst, adject, last_number=100)
+
+# Geração de dados.
+for i in range(10):
+    CSV.add_row([MOCK.create_name_data(), MOCK.create_progress_data([15, 35])])
 
 # Exportação da tabela em arquivo csv.
 CSV.build()
@@ -55,6 +75,7 @@ Perceba que não é obrigatório preencher todas as colunas para criar a sua tab
 
 ## Dependências
 - **csv** - Já vem com o seu Python, porém em algumas distros Linux pode haver alguma variação, fazendo-se necessário o download da dependência.
+- **random** - Já vem com o seu Python, porém em algumas distros Linux pode haver alguma variação, fazendo-se necessário o download da dependência.
 
 ## Recomendações
 - Use em projetos pequenos.

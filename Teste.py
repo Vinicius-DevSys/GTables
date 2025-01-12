@@ -1,14 +1,16 @@
 from GTables import *
 
-# Montagem da tabela.
-CSV = TableMaker(["Nome", "Idade", "CPF"])
-CSV.add_row(["James", 22])
-CSV.add_row(["Mary", 18])
-CSV.add_row(["George", 25])
+# Elementos para composição dos dados.
+subst = ["Espada", "Escudo", "Lança", "Adaga", "Orb", "Martelo"]
+adject = ["de Fogo", "Congelante", "Lendária", "Ancestral", "das Sombras", "de Guerra"]
 
-# Trecho para nos ajudar a visualizar o estado da tabela.
-for i in CSV.check_table():
-    print(i)
+# Montagem da tabela.
+CSV = TableMaker(["Item", "Valor"])
+MOCK = DataMaker(subst, adject, last_number=100)
+
+# Geração de dados.
+for i in range(10):
+    CSV.add_row([MOCK.create_name_data(), MOCK.create_progress_data([15, 35])])
 
 # Exportação da tabela em arquivo csv.
 CSV.build()
